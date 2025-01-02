@@ -40,7 +40,7 @@ const ChatComponent = () => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form onsubmit={handleSubmit}>
         <input
           type="text"
           placeholder="Your message"
