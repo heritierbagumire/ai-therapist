@@ -1,24 +1,14 @@
-import { NextResponse } from "next/server";
-import { detect_sentiment, get_response } from "@/lib/ai";
+import { streamText } from 'ai';
+import { openai } from '@ai-sdk/openai';
 
-export async function POST(request: Request) {
-  try {
-    const { text } = await request.json();
+export async function POST(req: Request) {
+  const { messages } = await req.json();
 
-    if (!text) {
-      return NextResponse.json(
-        { error: "No text input provided" },
-        { status: 400 }
-      );
-    }
-    const sentiment_label = await detect_sentiment(text);
-    const ai_response = get_response(text, sentiment_label);
+  const result = streamText({
+    model: openai('gpt-4o'), // Replace 'gpt-4o' with your model
+    system: 'You are a helpful assistant.',
+    messages,
+  });
 
-    return NextResponse.json({ ai_response: ai_response, user_text: text });
-  } catch (error: any) {
-    return NextResponse.json(
-      { error: `Error processing message: ${error.message}` },
-      { status: 500 }
-    );
-  }
+  return result.toDataStreamResponse();
 }

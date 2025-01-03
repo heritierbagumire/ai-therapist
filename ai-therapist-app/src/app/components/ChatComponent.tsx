@@ -1,74 +1,30 @@
+'use client';
 
-"use client";
-import { useState } from "react";
-type Chat = {
-    user: string;
-    ai: string;
-};
+import { useChat } from 'ai/react';
 
-const ChatComponent = () => {
-    const [userText, setUserText] = useState("");
-    const [aiResponse, setAiResponse] = useState("");
-    const [previousChats, setPreviousChats] = useState<
-        Chat[]
-    >([]);
-
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setUserText(event.target.value);
-    };
-
-    const handleSubmit = async (event: React.FormEvent) => {
-        event.preventDefault();
-
-        try {
-            const response = await fetch("/api/chat", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ text: userText }),
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const data = await response.json();
-            setAiResponse(data.ai_response);
-            setPreviousChats((prev) => [...prev, { user: userText, ai: data.ai_response }]);
-            setUserText("");
-        } catch (error: any) {
-            console.error("Error:", error);
-            setAiResponse("Error while trying to get the response");
-            setPreviousChats((prev) => [...prev, { user: userText, ai: "Error while trying to get the response" }]);
-            setUserText("");
-        }
-    };
+export default function ChatComponent() {
+    const { messages, input, handleSubmit, handleInputChange, isLoading } = useChat();
 
     return (
-        <div>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    placeholder="Your message"
-                    value={userText}
-                    onChange={handleInputChange}
-                    required
-                />
-                <button type="submit">Send</button>
-            </form>
-            <div>
-                {previousChats.map((chat, index) => (
-                    <div key={index}>
-                        <p>
-                            <strong>You: </strong> {chat.user}{" "}
-                        </p>
-                        <p>
-                            <strong>AI: </strong> {chat.ai}{" "}
-                        </p>
+        <div className="chat-container">
+            <div className="messages">
+                {messages.map((message) => (
+                    <div key={message.id} className={`message ${message.role}`}>
+                        <span>{message.role}: </span>{message.content}
                     </div>
                 ))}
             </div>
+
+            <form onSubmit={handleSubmit} className="input-form">
+                <input
+                    value={input}
+                    placeholder="Send a message..."
+                    onChange={handleInputChange}
+                    disabled={isLoading}
+                    className="chat-input"
+                />
+                <button type="submit" disabled={isLoading}>Send</button>
+            </form>
         </div>
     );
-};
-
-export default ChatComponent;
+}
