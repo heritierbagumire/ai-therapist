@@ -5,6 +5,7 @@ import { useChat } from 'ai/react';
 export default function ChatComponent() {
     const { messages, input, handleSubmit, handleInputChange, isLoading } = useChat();
 
+    // console.log('API Key:', process.env.NEXT_PUBLIC_OPENAI_API_KEY);   // like this right but the file is named .env.local instead hence the api key is undefined
     return (
         <div className="chat-container">
             <div className="messages">
