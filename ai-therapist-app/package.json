@@ -24,7 +24,8 @@
     "globals": "^15.14.0",
     "postcss": "^8",
     "tailwindcss": "^3",
-    "typescript": "^5.3.2",
-    "typescript-eslint": "^8.19.0"
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint": "^8.1.0"
   }
 }

@@ -1,5 +1,5 @@
 import ChatComponent from "./components/ChatComponent";
-import "./styles/global.css";
+import "@/app/globals.css";
 export default function Home() {
   return (
     <div>
