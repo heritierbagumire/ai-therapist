@@ -1,11 +1,15 @@
 "use client";
 import { useState } from "react";
+type Chat = {
+  user: string;
+  ai: string;
+};
 
 const ChatComponent = () => {
   const [userText, setUserText] = useState("");
   const [aiResponse, setAiResponse] = useState("");
   const [previousChats, setPreviousChats] = useState<
-    { user: string; ai: string }[]
+    Chat[]
   >([]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
