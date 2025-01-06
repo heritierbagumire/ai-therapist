@@ -11,9 +11,11 @@ export async function POST(req: Request) {
       maxTokens: 50,
     });
 
-    // Check if result contains a readable stream
-    if (result && result.stream) {
-      const reader = result.stream.getReader();
+    // Use a type assertion if you're sure the stream property exists
+    const streamResult = result as { stream: ReadableStream };
+
+    if (streamResult && streamResult.stream) {
+      const reader = streamResult.stream.getReader();
       let output = '';
       let done = false;
 
