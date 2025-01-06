@@ -1,14 +1,14 @@
-import { streamText } from 'ai';
-import { openai } from '@ai-sdk/openai';
+// import { streamText } from 'ai';
+// import { openai } from '@ai-sdk/openai';
 
-export async function POST(req: Request) {
-  const { messages } = await req.json();
+// export async function POST(req: Request) {
+//   const { messages } = await req.json();
 
-  const result = streamText({
-    model: openai('gpt-4o'), // Replace 'gpt-4o' with your model
-    system: 'You are a helpful assistant.',
-    messages,
-  });
+//   const result = streamText({
+//     model: openai('gpt-4o'), // Replace 'gpt-4o' with your model
+//     system: 'You are a helpful assistant.',
+//     messages,
+//   });
 
-  return result.toDataStreamResponse();
-}
+//   return result.toDataStreamResponse();
+// }

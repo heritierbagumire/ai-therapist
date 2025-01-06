@@ -1,31 +1,44 @@
 'use client';
 
-import { useChat } from 'ai/react';
+import { useState } from 'react';
 
-export default function ChatComponent() {
-    const { messages, input, handleSubmit, handleInputChange, isLoading } = useChat();
+export default function TestGPTButton() {
+    const [response, setResponse] = useState('');
 
-    // console.log('API Key:', process.env.NEXT_PUBLIC_OPENAI_API_KEY);   // like this right but the file is named .env.local instead hence the api key is undefined
+    async function testGPT() {
+        try {
+            const res = await fetch('/api/test_gpt', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    messages: [{ role: 'user', content: 'Hello, GPT!' }],
+                }),
+            });
+
+            if (!res.ok) {
+                throw new Error(`Request failed: ${res.statusText}`);
+            }
+
+            const data = await res.json();
+
+            // Log the response for debugging
+            console.log('Response:', data);
+
+            // Handle the response
+            setResponse(data?.content || 'No response received');
+            alert('Response: ' + (data?.content || 'No response received'));
+        } catch (error: any) {
+            console.error('Error:', error);
+            alert('Error: ' + error.message);
+        }
+    }
+
     return (
-        <div className="chat-container">
-            <div className="messages">
-                {messages.map((message) => (
-                    <div key={message.id} className={`message ${message.role}`}>
-                        <span>{message.role}: </span>{message.content}
-                    </div>
-                ))}
-            </div>
-
-            <form onSubmit={handleSubmit} className="input-form">
-                <input
-                    value={input}
-                    placeholder="Send a message..."
-                    onChange={handleInputChange}
-                    disabled={isLoading}
-                    className="chat-input"
-                />
-                <button type="submit" disabled={isLoading}>Send</button>
-            </form>
+        <div>
+            <button onClick={testGPT}>Test GPT</button>
+            <p>{response}</p>
         </div>
     );
 }
